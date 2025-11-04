@@ -1,0 +1,4 @@
+/* Ajuste global para compensar la navbar fija */
+section {
+    scroll-margin-top: 80px;
+}
