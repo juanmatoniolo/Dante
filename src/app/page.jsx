@@ -22,29 +22,29 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
-  // 🎵 Variante del audio remoto (opción predeterminada)
   const remoteAudio =
     "https://cdn.pixabay.com/download/audio/2022/03/15/audio_1c33a0f9b4.mp3?filename=soft-piano-ambient-110241.mp3";
 
-  // 🎵 Variante local (por si subís tu archivo a /public/music.mp3)
-  const localAudio = "/music.mp3";
-
+  // 🎯 Fecha estimada de nacimiento — 9 de febrero de 2026
   useEffect(() => {
-    const targetDate = new Date("2025-12-15T17:00:00");
+    const targetDate = new Date(2026, 1, 9, 0, 0, 0); // Mes 1 = febrero
     const timer = setInterval(() => {
       const now = new Date();
-      const difference = targetDate - now;
-      if (difference <= 0) {
+      const diff = targetDate.getTime() - now.getTime();
+
+      if (diff <= 0) {
         clearInterval(timer);
         return setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
+
       setTimeLeft({
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
       });
     }, 1000);
+
     return () => clearInterval(timer);
   }, []);
 
@@ -65,36 +65,22 @@ export default function Home() {
     visible: { opacity: 1, y: 0 },
   };
 
+  const handleViewMap = () => {
+    const mapsUrl =
+      "https://www.google.com/maps/dir/?api=1&destination=Formosa+259,+General+Rodríguez,+Buenos+Aires";
+    window.open(mapsUrl, "_blank");
+  };
+
   return (
     <div className={styles.container}>
       {/* NAVBAR */}
       <nav className={styles.navbar}>
         <ul>
-          <li>
-            <Link to="hero" smooth duration={800}>
-              Inicio
-            </Link>
-          </li>
-          <li>
-            <Link to="details" smooth duration={800}>
-              Detalles
-            </Link>
-          </li>
-          <li>
-            <Link to="memory" smooth duration={800}>
-              Ecografía
-            </Link>
-          </li>
-          <li>
-            <Link to="map" smooth duration={800}>
-              Ubicación
-            </Link>
-          </li>
-          <li>
-            <Link to="quote" smooth duration={800}>
-              Mensaje
-            </Link>
-          </li>
+          <li><Link to="hero" smooth duration={800}>Inicio</Link></li>
+          <li><Link to="details" smooth duration={800}>Detalles</Link></li>
+          <li><Link to="memory" smooth duration={800}>Ecografía</Link></li>
+          <li><Link to="map" smooth duration={800}>Ubicación</Link></li>
+          <li><Link to="quote" smooth duration={800}>Mensaje</Link></li>
         </ul>
       </nav>
 
@@ -106,30 +92,18 @@ export default function Home() {
           variants={fadeUp}
           transition={{ duration: 1 }}
         >
-          ¡Bienvenido al Baby Shower de <span>Dante</span>!
+          ¡Contamos los días para conocer a <span>Dante</span>! 💚
         </motion.h1>
         <p className={styles.subtitle}>
-          Un día para celebrar la llegada de un nuevo milagro 💙
+          Faltan solo unos momentos para su llegada al mundo 🌿
         </p>
 
-        {/* Contador */}
+        {/* Contador de nacimiento */}
         <div className={styles.countdown}>
-          <div>
-            <span>{timeLeft.days}</span>
-            <p>Días</p>
-          </div>
-          <div>
-            <span>{timeLeft.hours}</span>
-            <p>Horas</p>
-          </div>
-          <div>
-            <span>{timeLeft.minutes}</span>
-            <p>Minutos</p>
-          </div>
-          <div>
-            <span>{timeLeft.seconds}</span>
-            <p>Segundos</p>
-          </div>
+          <div><span>{timeLeft.days}</span><p>Días</p></div>
+          <div><span>{timeLeft.hours}</span><p>Horas</p></div>
+          <div><span>{timeLeft.minutes}</span><p>Minutos</p></div>
+          <div><span>{timeLeft.seconds}</span><p>Segundos</p></div>
         </div>
       </section>
 
@@ -143,32 +117,24 @@ export default function Home() {
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        <h2>
-          <FaCalendarAlt /> Detalles del evento
-        </h2>
+        <h2><FaCalendarAlt /> Detalles del evento</h2>
         <div className={styles.detailGrid}>
           <div>
             <FaCalendarAlt className={styles.icon} />
-            <p>
-              <strong>Fecha:</strong> Domingo 15 de Diciembre
-            </p>
+            <p><strong>Fecha:</strong> Viernes 21 de Noviembre de 2025</p>
           </div>
           <div>
             <FaClock className={styles.icon} />
-            <p>
-              <strong>Horario:</strong> 17:00 hs
-            </p>
+            <p><strong>Horario:</strong> de 13:00 a 17:00 hs</p>
           </div>
           <div>
             <FaMapMarkerAlt className={styles.icon} />
-            <p>
-              <strong>Lugar:</strong> Casa Quinta “Los Aromos”
-            </p>
+            <p><strong>Lugar:</strong> Formosa 259, General Rodríguez</p>
           </div>
         </div>
       </motion.section>
 
-      {/* ECOSONOGRAMA */}
+      {/* ECO */}
       <motion.section
         id="memory"
         className={styles.memory}
@@ -212,16 +178,24 @@ export default function Home() {
       >
         <h2>Ubicación del evento 📍</h2>
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.358217087247!2d-58.38155998477071!3d-34.6036844804594!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccacd6cd8f2fd%3A0x9d84f37bba9c58e!2sCasa%20Quinta!5e0!3m2!1ses!2sar!4v1699630435650!5m2!1ses!2sar"
+          src="https://www.google.com/maps?q=Formosa+259,+General+Rodríguez,+Buenos+Aires&output=embed"
           width="100%"
           height="400"
           style={{ border: 0, borderRadius: "20px" }}
           allowFullScreen=""
           loading="lazy"
         ></iframe>
+
+        <motion.button
+          className={styles.mapButton}
+          onClick={handleViewMap}
+          whileTap={{ scale: 0.95 }}
+        >
+          Ver ubicación
+        </motion.button>
       </motion.section>
 
-      {/* FRASE FINAL */}
+      {/* MENSAJE FINAL */}
       <motion.section
         id="quote"
         className={styles.quote}
@@ -232,9 +206,8 @@ export default function Home() {
         viewport={{ once: true }}
       >
         <motion.blockquote transition={{ duration: 1 }}>
-          “Cada pequeño comienzo encierra una gran promesa.” <br />
-          ¡Te esperamos con amor, Dante!{" "}
-          <FaHeart className={styles.heartIcon} />
+          “Festejamos juntos la llegada de un nuevo milagro llamado Dante.” <br />
+          ¡Te esperamos con mucho amor! <FaHeart className={styles.heartIcon} />
         </motion.blockquote>
       </motion.section>
 
@@ -253,7 +226,7 @@ export default function Home() {
         {isPlaying ? <FaPause /> : <FaPlay />}
       </motion.button>
 
-      {/* AUDIO PLAYER — usa el remoto por defecto */}
+      {/* AUDIO */}
       <audio ref={audioRef} src={remoteAudio} loop preload="none" />
     </div>
   );
